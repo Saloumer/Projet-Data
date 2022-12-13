@@ -20,36 +20,89 @@ def afficherAgeClientSelonNaissance(df):
     """ df["Age"] = 2014-df["Year_Birth"]
     """)
 
+def afficherAgeMoyen(df):
+    st.markdown(""" 
+    ## **L'age moyen des clients?**
+    """)
+    st.code(""" df['Age'].mean()
+    """)
+    df['Age'].mean()
+    st.markdown(""" 
+    **L'age moyen des clients 45**
+    """)
+
+
+def afficherAgeSelonNombreAchat(df):
+    st.markdown(""" 
+    ## **En quoi consiste l'âge par rapport au nombre d'achats?**
+    """)
     figure = plt.figure()
     sns.kdeplot(df,x='Age')
     st.pyplot(figure)
 
-def afficherAgeSelonNombreAchat(df):
-jnsqakd kjqsn
-    
 def afficherNombreDachatsParClients(df):
-    st.markdown(""" 
-    ## **En quoi consiste l'âge par rapport au nombre d'achats?**
-    """)
-    sns.displot(df,x='Age',kind='kde')
+    df['total_purchases']=df['MntFishProducts']+df["MntFruits"]+df['MntGoldProds']+df['MntMeatProducts']+df['MntSweetProducts']+df["MntWines"]
+    figure = plt.figure()
+    sns.kdeplot(df,x='total_purchases')
     p = sns.lineplot()
-    p.set(title = "L'age")
+    p.set(title = " Le nombre d'achats effectués par les clients")
     plt.subplot()
-
+    st.pyplot(figure)
 
 def afficherRapportEntreNombreDachatsEtNombreEnfantsEtTailleFamille(df):
+    figure = plt.figure()
+    sns.stripplot(df,x='Teenhome',y='total_purchases') 
+    p = sns.lineplot()
+    p.set(title = "La relation entre le nombre d'achats et le nombre d’adolescents")
+    #plt.subplot()
+    st.pyplot(figure)
+
+    figure = plt.figure()
+    sns.catplot(df,x='Kidhome',y='total_purchases',kind='strip')
+    p = sns.lineplot()
+    p.set(title = "La relation entre le nombre d'achats et le nombre d’enfants")
+    plt.subplot()
+    st.pyplot(figure)
+
 
 def afficherNombreTotalEnfantsDansFoyer(df):
+    df["nbre_enfant"]=df["Kidhome"]+df["Teenhome"]
+    df["nbre_enfant"].head()
 
-def afficherRelationEntreRevenuTailleFamilleNombreEnfants(df):
+    df['Marital_Status'].value_counts()
 
-def afficherRelationEntreEducationEtRevenu(df):
+    df['Marital_Status'].replace('Alone','Single',inplace=True)
+    df['Marital_Status'].replace('Absurd','Single',inplace=True)
+    df['Marital_Status'].replace('YOLO','Single',inplace=True)
 
-def afficherRelationEntreRevenuTailleFamilleEtNombreEnfants(df):
+    df["Vivre_avec"]=df["Marital_Status"].replace({"Married":"Partner", "Together":"Partner", "Widow":"Alone", "Divorced":"Alone" ,'Single':"Alone"})
 
-def afficherRelationEntreRevenuEtNombreAchats(df):
+    df["Vivre_avec"]= df["Vivre_avec"].replace({"Alone": "1", "partner": "2"})
+    df["Vivre_avec"].head(135)
 
-def afficherRelationEntreNombreAchatsOffreNombreAchatsEtNombreAchatsCatalogue(df):
+    fig, ax = plt.subplots(figsize=(13, 7))
+    colors2=['#F034A3','#283593','#03a9f4','#004d40','#c2185b'] 
+
+    patches, texts, pcts = ax.pie(
+    df['Marital_Status'].value_counts(), labels=[*df['Marital_Status'].value_counts().index], autopct='%.2f',colors=colors2
+    ,wedgeprops={'linewidth': 2.0, 'edgecolor': 'white'},
+    textprops={'size': 'x-large'},
+    startangle=90)
+    centre_circle = plt.Circle((0,0),0.20,fc='white') 
+    plt.gcf().gca().add_artist(centre_circle)
+    plt.tight_layout()
+    plt.title(label='Etat civil',fontsize=22,fontstyle='oblique')
+    fig.legend()
+
+#def afficherRelationEntreRevenuTailleFamilleNombreEnfants(df):
+
+#def afficherRelationEntreEducationEtRevenu(df):
+
+#def afficherRelationEntreRevenuTailleFamilleEtNombreEnfants(df):
+
+#def afficherRelationEntreRevenuEtNombreAchats(df):
+
+#def afficherRelationEntreNombreAchatsOffreNombreAchatsEtNombreAchatsCatalogue(df):
 
 
 def load_view():
@@ -71,6 +124,8 @@ def load_view():
     df = lectureCsvFichier()
 
     afficherAgeClientSelonNaissance(df)
+
+    afficherAgeMoyen(df)
     
     afficherAgeSelonNombreAchat(df)
 
@@ -78,59 +133,22 @@ def load_view():
 
     afficherRapportEntreNombreDachatsEtNombreEnfantsEtTailleFamille(df)
 
-    afficherNombreTotalEnfantsDansFoyer(df)
+    #afficherNombreTotalEnfantsDansFoyer(df)
 
-    afficherRelationEntreRevenuTailleFamilleNombreEnfants(df)
+    #afficherRelationEntreRevenuTailleFamilleNombreEnfants(df)
 
-    afficherRelationEntreEducationEtRevenu(df)
+    #afficherRelationEntreEducationEtRevenu(df)
 
-    afficherRelationEntreRevenuTailleFamilleEtNombreEnfants(df)
+    #afficherRelationEntreRevenuTailleFamilleEtNombreEnfants(df)
 
-    afficherRelationEntreRevenuEtNombreAchats(df)
+    #afficherRelationEntreRevenuEtNombreAchats(df)
 
-    afficherRelationEntreNombreAchatsOffreNombreAchatsEtNombreAchatsCatalogue(df)
-
-
+    #afficherRelationEntreNombreAchatsOffreNombreAchatsEtNombreAchatsCatalogue(df)
 
 
-    ############################"
-    revenu = plt.figure()
-    sns.boxplot(df,x='Income')
-    st.pyplot(revenu)
+
+
     
-    autre = plt.figure()
-    sns.histplot(df, x='Age')
+ 
 
-    #p = sns.lineplot()
-    #p.set(title = "L'age")
-    #plt.show(sns)
-    st.pyplot(autre) 
-
-
-    ############################"
-
-    st.markdown(""" 
-    ## **L'age moyen des clients?**
-    """)
-    st.code(""" df['Age'].mean()
-    """)
-    df['Age'].mean()
-    st.markdown(""" 
-    **L'age moyen des clients 45**
-    """)
-
-    fig, ax = plt.subplots(figsize=(13, 7))
-    colors2=['#F034A3','#283593','#03a9f4','#004d40','#c2185b'] 
-    ax.pie(
-    df['Marital_Status'].value_counts(), labels=[*df['Marital_Status'].value_counts().index], autopct='%.2f',colors=colors2
-    ,wedgeprops={'linewidth': 2.0, 'edgecolor': 'white'},
-    textprops={'size': 'x-large'},
-    startangle=90)
-    centre_circle = plt.Circle((0,0),0.20,fc='white') 
-    plt.gcf().gca().add_artist(centre_circle)
-    plt.tight_layout()
-    plt.title(label='Etat civil',fontsize=22,fontstyle='oblique')
-    fig.legend()
-    st.pyplot(fig)
-
-
+    
