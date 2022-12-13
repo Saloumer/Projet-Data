@@ -25,7 +25,9 @@ def afficherAgeClientSelonNaissance(df):
     st.pyplot(figure)
 
 def afficherAgeSelonNombreAchat(df):
-
+jnsqakd kjqsn
+    
+def afficherNombreDachatsParClients(df):
     st.markdown(""" 
     ## **En quoi consiste l'âge par rapport au nombre d'achats?**
     """)
@@ -33,6 +35,22 @@ def afficherAgeSelonNombreAchat(df):
     p = sns.lineplot()
     p.set(title = "L'age")
     plt.subplot()
+
+
+def afficherRapportEntreNombreDachatsEtNombreEnfantsEtTailleFamille(df):
+
+def afficherNombreTotalEnfantsDansFoyer(df):
+
+def afficherRelationEntreRevenuTailleFamilleNombreEnfants(df):
+
+def afficherRelationEntreEducationEtRevenu(df):
+
+def afficherRelationEntreRevenuTailleFamilleEtNombreEnfants(df):
+
+def afficherRelationEntreRevenuEtNombreAchats(df):
+
+def afficherRelationEntreNombreAchatsOffreNombreAchatsEtNombreAchatsCatalogue(df):
+
 
 def load_view():
 
@@ -56,7 +74,21 @@ def load_view():
     
     afficherAgeSelonNombreAchat(df)
 
+    afficherNombreDachatsParClients(df)
 
+    afficherRapportEntreNombreDachatsEtNombreEnfantsEtTailleFamille(df)
+
+    afficherNombreTotalEnfantsDansFoyer(df)
+
+    afficherRelationEntreRevenuTailleFamilleNombreEnfants(df)
+
+    afficherRelationEntreEducationEtRevenu(df)
+
+    afficherRelationEntreRevenuTailleFamilleEtNombreEnfants(df)
+
+    afficherRelationEntreRevenuEtNombreAchats(df)
+
+    afficherRelationEntreNombreAchatsOffreNombreAchatsEtNombreAchatsCatalogue(df)
 
 
 
