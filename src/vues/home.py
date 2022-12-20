@@ -4,151 +4,56 @@ import seaborn as sns, numpy as np
 from src.controllers.auth import login
 from src.router import redirect
 from pandas import DataFrame, read_csv
-
-def lectureCsvFichier():
-    df = read_csv("src/assets/marketing_campaign.tsv", sep="\t")
-    st.dataframe(df)
-    return df
-
-def afficherAgeClientSelonNaissance(df):
-    st.markdown(""" 
-    ## **L'âge du client selon la date de naissance** :
-    """)
-    df["Age"] = 2014-df["Year_Birth"]
-    st.dataframe(df)
-    st.code(
-    """ df["Age"] = 2014-df["Year_Birth"]
-    """)
-
-def afficherAgeMoyen(df):
-    st.markdown(""" 
-    ## **L'age moyen des clients?**
-    """)
-    st.code(""" df['Age'].mean()
-    """)
-    df['Age'].mean()
-    st.markdown(""" 
-    **L'age moyen des clients 45**
-    """)
+import pandas as pd
+import plotly.express as px
+from src.controllers.auth import logout
 
 
-def afficherAgeSelonNombreAchat(df):
-    st.markdown(""" 
-    ## **En quoi consiste l'âge par rapport au nombre d'achats?**
-    """)
-    figure = plt.figure()
-    sns.kdeplot(df,x='Age')
-    st.pyplot(figure)
+def load_view():
+    st.title("Acceuil")
 
-def afficherNombreDachatsParClients(df):
-    df['total_purchases']=df['MntFishProducts']+df["MntFruits"]+df['MntGoldProds']+df['MntMeatProducts']+df['MntSweetProducts']+df["MntWines"]
-    figure = plt.figure()
-    sns.kdeplot(df,x='total_purchases')
-    p = sns.lineplot()
-    p.set(title = " Le nombre d'achats effectués par les clients")
-    plt.subplot()
-    st.pyplot(figure)
-
-def afficherRapportEntreNombreDachatsEtNombreEnfantsEtTailleFamille(df):
-    figure = plt.figure()
-    sns.stripplot(df,x='Teenhome',y='total_purchases') 
-    p = sns.lineplot()
-    p.set(title = "La relation entre le nombre d'achats et le nombre d’adolescents")
-    #plt.subplot()
-    st.pyplot(figure)
-
-    figure = plt.figure()
-    sns.catplot(df,x='Kidhome',y='total_purchases',kind='strip')
-    p = sns.lineplot()
-    p.set(title = "La relation entre le nombre d'achats et le nombre d’enfants")
-    plt.subplot()
-    st.pyplot(figure)
-
-
-def afficherNombreTotalEnfantsDansFoyer(df):
-    df["nbre_enfant"]=df["Kidhome"]+df["Teenhome"]
-    df["nbre_enfant"].head()
-
-    df['Marital_Status'].value_counts()
-
-    df['Marital_Status'].replace('Alone','Single',inplace=True)
-    df['Marital_Status'].replace('Absurd','Single',inplace=True)
-    df['Marital_Status'].replace('YOLO','Single',inplace=True)
-
-    df["Vivre_avec"]=df["Marital_Status"].replace({"Married":"Partner", "Together":"Partner", "Widow":"Alone", "Divorced":"Alone" ,'Single':"Alone"})
-
-    df["Vivre_avec"]= df["Vivre_avec"].replace({"Alone": "1", "partner": "2"})
-    df["Vivre_avec"].head(135)
-
-    fig, ax = plt.subplots(figsize=(13, 7))
-    colors2=['#F034A3','#283593','#03a9f4','#004d40','#c2185b'] 
-
-    patches, texts, pcts = ax.pie(
-    df['Marital_Status'].value_counts(), labels=[*df['Marital_Status'].value_counts().index], autopct='%.2f',colors=colors2
-    ,wedgeprops={'linewidth': 2.0, 'edgecolor': 'white'},
-    textprops={'size': 'x-large'},
-    startangle=90)
-    centre_circle = plt.Circle((0,0),0.20,fc='white') 
-    plt.gcf().gca().add_artist(centre_circle)
-    plt.tight_layout()
-    plt.title(label='Etat civil',fontsize=22,fontstyle='oblique')
-    fig.legend()
-
-#def afficherRelationEntreRevenuTailleFamilleNombreEnfants(df):
-
-#def afficherRelationEntreEducationEtRevenu(df):
-
-#def afficherRelationEntreRevenuTailleFamilleEtNombreEnfants(df):
-
-#def afficherRelationEntreRevenuEtNombreAchats(df):
-
-#def afficherRelationEntreNombreAchatsOffreNombreAchatsEtNombreAchatsCatalogue(df):
-
+    if st.button("Deconnexion"):
+        logout()
+        redirect("/login", reload=True)
 
 def load_view():
 
     st.markdown(" # Page Home")
-    if st.button("connecter-vous"):
-        redirect("/login", reload=True)
     
     st.markdown(""" 
-    ## **Problématique** : 
+    ##### Problématique : 
 
-    Si je souhaite mettre un produit sur le marcher, qui sera mes acheteurs? avec quelle support de vente?
-    Produit / Type de personnes ( financier,age, Taille de la famille)
-    Produit / place de vente  
-    place de vente / Type de personne 
+    Si je souhaite mettre un produit sur le marcher:
+    - Quel segment de clientèle est le plus susceptible d’acheter le produit? 
+    - La relation entre l'age, taille de la famille, revenu et le nombre d'achat?
+    - Avec quelle support de vente?
+ 
+    """)
+    st.markdown(""" **J'ai choisi d'effectuer mon analyse à l'aide du langage python**.
     """)
 
-    
-    df = lectureCsvFichier()
 
-    afficherAgeClientSelonNaissance(df)
+    st.markdown(""" ## Pourquoi utiliser le langage Python?
+    - Il constitue le langage de programmation le plus disponible.
+    - Il est la langue open source la plus utilisée dans le monde.
+    - Il est un langage à plateformes multiples.
+    - Il identifie et met automatiquement en correspondance les types de données. 
+    - Il est généralement facile à utiliser, ce qui demande moins de temps pour le codage.
+    - Il n'existe aucune limite pour le traitement des données.
+    """)
 
-    afficherAgeMoyen(df)
-    
-    afficherAgeSelonNombreAchat(df)
+    st.markdown(""" ### En python, nous travaillons avec les bibliothèques suivantes.:
 
-    afficherNombreDachatsParClients(df)
-
-    afficherRapportEntreNombreDachatsEtNombreEnfantsEtTailleFamille(df)
-
-    #afficherNombreTotalEnfantsDansFoyer(df)
-
-    #afficherRelationEntreRevenuTailleFamilleNombreEnfants(df)
-
-    #afficherRelationEntreEducationEtRevenu(df)
-
-    #afficherRelationEntreRevenuTailleFamilleEtNombreEnfants(df)
-
-    #afficherRelationEntreRevenuEtNombreAchats(df)
-
-    #afficherRelationEntreNombreAchatsOffreNombreAchatsEtNombreAchatsCatalogue(df)
-
-
+    - ##### Librairie Pandas : 
+    Pour la transformation des données, il est également facile de lire les données dans divers formats.
+    - ##### Librairie Matplotlib: 
+    Est un outil pour tracer des graphiques et visualiser des donnéeset. Matplotlib contient une sous-bibliothèque **pyplot** qui crée une interface proche du logiciel commercial Matlab.
+    - ##### Librairie Seborne:
+    Pour la visualisation de données, spécialisée dans l’analyse statistique. Seaborne permet la réalisation de graphes statistiques de qualité.
+    """)
 
 
     
- 
 
-    
+   
+
