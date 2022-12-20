@@ -12,9 +12,9 @@
 .navitem{
     float: left;
     display: block;
-    color: #070707 !important;
+    color: #2d2b2b !important;
     text-align: center;
-    padding: 20px 20px;
+    padding: 13px 13px;
     text-decoration: none !important;
     border-bottom: 3px solid transparent;
     font-size: 17px;
@@ -32,7 +32,7 @@
 }
 
 .version-span{
-    color: rgb(189, 17, 17);
+    color: white;
     position: absolute;
     right: 1rem;
     bottom: 1.75rem;
